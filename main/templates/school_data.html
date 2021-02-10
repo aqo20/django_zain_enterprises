@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "{% static 'loose.dtd' %}">
+<html>
+    <head>
+        <title>Zain Enterprise</title>
+        <style type="text/css">
+            body {
+                font-weight: 200;
+                font-size: 14px;
+            }
+            .header {
+                font-size: 20px;
+                font-weight: 100;
+                text-align: center;
+                color: #007cae;
+            }
+            .title {
+                font-size: 22px;
+                font-weight: 100;
+               /* text-align: right;*/
+               padding: 10px 20px 0px 20px;  
+            }
+            .title span {
+                color: #007cae;
+            }
+            .details {
+                padding: 5px 5px 0px 0px;
+                /*margin-left: 40%;*/
+            }
+            .hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+
+            }
+            td {
+                text-align: center;
+            }
+            .logo {
+                width: 80px;
+                height: 65px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        {% if schoo %}
+
+        <div class="logo">
+            <div class="table-responsive">
+                  <table class="table">
+                            <thead class="black white-text">
+                              <tr>
+                                <th scope="col" style="text-align: left"><img src="http://127.0.0.1:8000{% static '/images/logo.jpg' %}"></th>
+                                <th scope="col"></th>
+                                <th scope="col" style="width: 15%; text-align: right">Contact: 0300-0000000 
+                                City Heart Plaza 1st floor, Office#8, Chinot Bazar, Faisalabad</th>
+                            </tr>
+                        </thead>
+                    </table>
+            </div>            
+        </div>
+        <div class="wrapper">
+            <div class="header">
+                <p class="title">{{ schools }} | Complete Report</p>
+            </div>
+            <div class="details">
+                <h2 style="text-align:left; font-size: 18px;">Total Invoices = {{ obj1 }}</h2>
+                <hr class='hrItem' />
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class="black white-text">
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Bill No.</th>
+                        <th scope="col">Deputy</th>
+                        <th scope="col">School</th>
+                        <th scope="col">Ex-Amount</th>
+                        <th scope="col">Inclusive Amount</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Payment</th>
+                      </tr>
+                    </thead>
+                    {% for school in schoo %}
+                    <tbody>
+                      <tr>
+                        <th scope="row"></th>
+                        <td>{{school.bill_no}}</td>
+                        <td>{{school.deputy}}</td>
+                        <td>{{school.school}}</td>
+                        <td>{{school.ex_amount}}</td>
+                        <td>{{school.inclusive_amount}}</td>
+                        <td>{{school.date}}</td>
+                        <td>{{school.payment_recieved}}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+
+            </div>
+
+
+        </div>
+        
+        {% else %}
+
+        {% endif %}
+    </body>
+</html>

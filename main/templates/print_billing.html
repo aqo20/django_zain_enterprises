@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "{% static 'loose.dtd' %}">
+<html>
+    <head>
+        <title>Zain Enterprise</title>
+        <style type="text/css">
+            body {
+                font-weight: 200;
+                font-size: 14px;
+            }
+            .header {
+                font-size: 20px;
+                font-weight: 100;
+                text-align: center;
+                color: #007cae;
+            }
+            .title {
+                font-size: 22px;
+                font-weight: 100;
+               /* text-align: right;*/
+               padding: 10px 20px 0px 20px;  
+            }
+            .title span {
+                color: #007cae;
+            }
+            .details {
+                padding: 5px 5px 0px 0px;
+                /*margin-left: 40%;*/
+            }
+            .hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: #333; /* old IE */
+                background-color: #fff; /* Modern Browsers */
+
+            }
+            td {
+                text-align: center;
+            }
+            .logo {
+                width: 80px;
+                height: 65px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        {% if check_bill %}
+
+        <div class="logo">
+            <div class="table-responsive">
+                  <table class="table">
+                            <thead class="black white-text">
+                              <tr>
+                                <th scope="col" style="text-align: left"><img src="http://127.0.0.1:8000{% static '/images/logo.jpg' %}"></th>
+                                <th scope="col"></th>
+                                <th scope="col" style="width: 15%; text-align: right">Contact: 0300-0000000 
+                                City Heart Plaza 1st floor, Office#8, Chinot Bazar, Faisalabad</th>
+                            </tr>
+                        </thead>
+                    </table>
+            </div>            
+        </div>
+        <div class="wrapper">
+
+            <div class="header">
+                <p class="title">Invoice # {{ check_bill.bill_no }}</p>
+            </div>
+            <div class="details">
+                <div class="table-responsive">
+                  <table class="table">
+                            <thead class="black white-text">
+                              <tr>
+                                
+                                <td scope="col" style="text-align: left">School : {{ check_bill.school }}<br>Deputy : {{ check_bill.deputy }}</td>
+                                <th scope="col"></th>
+                                <th scope="col" style="text-align: right;">Date & Time : {{ check_bill.date }}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>   
+                     
+                    <h2 style="text-align:left; font-size: 18px;">Description</h2>
+                <hr class='hrItem' />
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class="black white-text">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Material.</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                {% for order in order1 %}
+                        <th scope="row">{{order.id}}</th>
+                        <td>{{order.item}}</td>
+                        <td>{{order.quantity}}</td>
+                        <td>{{order.price}}</td>
+                      </tr>
+                    </tbody>
+                {% endfor %}
+                  </table>
+                </div>
+                <hr class='hrItem' />
+                    <p style="text-align: right; margin-right: 70px;">Exclusive Price = {{ check_bill.ex_amount }}</p>
+                <hr>
+                Sale Tax: {{ check_bill.sale_tax }} %<br/>
+                Income Tax: {{ check_bill.income_tax }} %<br/>
+                Service Tax: {{ check_bill.service_tax }} %<br/>
+                PST Tax: {{ check_bill.PST_tax }} %<br/>
+               <p style="text-align: right; margin-right: 70px;">Inclusive Price = {{ check_bill.inclusive_amount }}</p>  <br/>
+                Payment Recieved: {{ check_bill.payment_recieved }}<br/>
+
+            </div>
+
+
+        </div>
+        
+        {% else %}
+
+        {% endif %}
+    </body>
+</html>

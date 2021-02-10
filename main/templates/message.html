@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">
+              <span data-feather="home"></span>
+            </a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:school_report' %}">
+              <span data-feather="bar-chart-2"></span>
+              School Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:daily' %}">
+              <span data-feather="users"></span>
+              Daily Report
+            </a>
+          </li>
+          
+          {% else %}
+
+          {% endif %}
+        </ul>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Built Invoice
+            </a>
+          </li>
+        <h6 class="sidebar-heading justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Generate Bill #
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:details' %}">
+              <span data-feather="file-text"></span>
+              Add/Remove
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">
+              <span data-feather="file-text"></span>
+              Details
+            </a>
+          </li>
+        </ul>
+      </h6>
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:check' %}">
+          <span data-feather="file"></span>
+          Print Invoice
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:payment' %}">
+          <span data-feather="shopping-cart"></span>
+          Add Payment
+        </a>
+      </li>
+      </ul>
+      
+
+      </div>
+    </nav>
+
+
+{% if message %}
+<div class="message container">
+  <h2>Warning ! Unverified</h2>
+  <h4>Bill # {{bill_no}}</h4>
+  <p>Note: {{message}} </p>
+  <p>Please <a href="{% url 'myapp:new_billing' %}">Go Back</a> to generate a valid bill number again.</p>
+</div>
+{% elif message1 %}
+<div class="message container">
+  <h2>Succesfully generated !</h2>
+  <h4>Bill # {{bill_no}}</h4>
+  <p>Note: {{message1}}</p>
+  <p>Please go back to <a href="/payment">Add Payment</a> in database.</p>
+</div>
+{% elif message2 %}
+<div class="message container">
+	<h2>Succesfully ! generated invoice against this bill.</h2>
+	<h4>Bill # {{bill_no}}</h4>
+	<p>Note: {{message2}} and go to <a href="/check">Check Invoice</a> to print the bill.</p>
+</div>
+{% elif message3 %}
+<div class="message container">
+  <h2>Warning ! Please select valid school name from list.</h2>
+  <p>Note: {{message3}}.Plaease <a href="/school_report">Go Back</a> to print the valid school details.</p>
+</div>
+{% elif message4 %}
+<div class="message container">
+  <h2>Warning ! This Bill is not in database.</h2>
+  <h4>Bill # {{bill_no}}</h4>
+  <p>Note: {{message4}}.Please <a href="/check">Go Back</a> to print the valid bill from database.</p>
+  <p>Or</p>
+  <p><a href="{% url 'myapp:new_billing' %}">Generate</a> a bill against this bill number</p>
+</div>
+{% elif message5 %}
+<div class="message container">
+  <h2>Warning ! Unverified Bill Number.</h2>
+  <h4>Bill # {{bill_no}}</h4>
+  <p>Note: {{message5}}</p>
+  <p>Or</p>
+  <p>This bill has already payment recieved. Please <a href="/check">Check Invoice</a> for confirmation.</p>
+</div>
+{% else %}
+<div class="message container">
+  <h2>Welcome {{request.user.first_name}} {{request.user.last_name}} !</h2>
+</div>
+{% endif %}
+
+{% endblock %}

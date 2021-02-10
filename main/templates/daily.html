@@ -1,0 +1,136 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">
+              <span data-feather="home"></span>
+            </a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:school_report' %}">
+              <span data-feather="bar-chart-2"></span>
+              School Report
+            </a>
+          </li>
+          <li class="nav-item" style="background-color: #96847a;">
+            <a class="nav-link" href="{% url 'myapp:daily' %}">
+              <span data-feather="users"></span>
+              Daily Report
+            </a>
+          </li>
+          {% else %}
+
+          {% endif %}
+        </ul>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Built Invoice
+            </a>
+          </li>
+        <h6 class="sidebar-heading justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Generate Bill #
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:details' %}">
+              <span data-feather="file-text"></span>
+              Add/Remove
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">
+              <span data-feather="file-text"></span>
+              Details
+            </a>
+          </li>
+        </ul>
+      </h6>
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:check' %}">
+          <span data-feather="file"></span>
+          Print Invoice
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:payment' %}">
+          <span data-feather="shopping-cart"></span>
+          Add Payment
+        </a>
+      </li>
+      </ul>
+      </div>
+    </nav>
+    
+{% if user.is_superuser %}
+{% load crispy_forms_tags %}
+
+<form action="" method="post">
+  {% csrf_token %}
+
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-primary">Check</button>
+</form>
+<div class="col-12" style="text-align: center; margin-top: 40px;">
+  <h4>This Page is down due to maintainance.</h4>
+</div>
+{% if obj1 %}
+<div class="check_details">
+  <h3>Total Inovices Created( by {{request.user}} ): {{obj1}}</h3>
+</div>
+{% endif %}
+{% if obj %}
+<div class="table-responsive">
+  <table class="table">
+    <thead class="black white-text">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Bill No.</th>
+        <th scope="col">Deputy</th>
+        <th scope="col">School</th>
+        <th scope="col">Ex-Amount</th>
+        <th scope="col">Inclusive Amount</th>
+        <th scope="col">Date</th>
+        <th scope="col">Payment</th>
+      </tr>
+    </thead>
+    {% for objs in obj %}
+    <tbody>
+      <tr>
+        <th scope="row"></th>
+        <td>{{objs.bill_no}}</td>
+        <td>{{objs.deputy}}</td>
+        <td>{{objs.school}}</td>
+        <td>{{objs.ex_amount}}</td>
+        <td>{{objs.inclusive_amount}}</td>
+        <td>{{objs.date}}</td>
+        <td>{{objs.payment_recieved}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
+{% endif %}
+{% else %}
+<h2>Security Prohibted !!! You are not Admin...</h2>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">
+              <span data-feather="home"></span>
+            </a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:school_report' %}">
+              <span data-feather="bar-chart-2"></span>
+              School Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:daily' %}">
+              <span data-feather="users"></span>
+              Daily Report
+            </a>
+          </li>
+          
+          {% else %}
+
+          {% endif %}
+        </ul>
+
+        
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Built Invoice
+            </a>
+          </li>
+        <h6 class="sidebar-heading justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Generate Bill #
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:details' %}">
+              <span data-feather="file-text"></span>
+              Add/Remove
+            </a>
+          </li>
+          <li class="nav-item" style="background-color: #96847a;">
+            <a class="nav-link disabled">
+              <span data-feather="file-text"></span>
+              Details
+            </a>
+          </li>
+        </ul>
+      </h6>
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:check' %}">
+          <span data-feather="file"></span>
+          Print Invoice
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:payment' %}">
+          <span data-feather="shopping-cart"></span>
+          Add Payment
+        </a>
+      </li>
+      </ul>
+      </div>
+    </nav>
+<h1>Bill # {{ bill_new }}</h1>
+
+<div class="col-12 row">
+  {% if order1 %}
+  <div class="table-responsive col-8 left">
+    <table class="table">
+      <thead class="black white-text">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Material</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      {% for order in order1 %}
+      <tbody>
+        <tr>
+          <th scope="row"></th>
+          <td>{{ order.item }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.price }}</td>
+         </tr>
+      </tbody>
+      {% endfor %}
+      <tbody>
+        <tr>
+          <th scope="row"></th>
+          <td></td>
+          <th style="text-align: right;">Ex-Amount:</th>
+          <th>{{ex_amount}}</th>   
+          <td></td>      
+         </tr>
+      </tbody>
+  </table>
+  </div>
+{% else %}
+<div class="table-responsive col-8 left">
+  <table class="table">
+    <thead class="black white-text">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Material</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+   </table>
+</div>
+{% endif %}
+
+
+{% load crispy_forms_tags %}
+<div class="row a_r_f col-3">
+<form action="" method="post" class="col-12">
+  {% csrf_token %}
+  <label>Deputy*</label>
+  <input type="hidden" name="bill_no" value="{{bill_new}}">
+  <input type="text" list="deputylist" name="deputy" placeholder="Enter Valid Deputy Name From The List." class="form-control" required>
+  <datalist id="deputylist">
+    {% for deputy in deputy %}
+    <option value="{{ deputy.deputy_name }}"></option>
+    {% endfor %}
+  </datalist>
+  <label>School*</label>
+  <input type="text" list="schoollist" name="school" placeholder="Enter Valid School Name From The List." class="form-control" required>
+  <datalist id="schoollist">
+
+    {% for school in school %}
+    <option value="{{ school.school_name }}"></option>
+    {% endfor %}
+  </datalist>
+  
+  {{form|crispy}}
+  <div style="overflow:auto;">
+	  <div style="float:right;margin-top: 60px;">
+  		<button type="submit" class="btn btn-secondary" name="form4">Make Invoice</button>
+  	</div>
+  </div>
+</form>
+</div>
+	<div style="text-align:center;margin-top:40px;">
+	  <span class="step"></span>
+	  <span class="step"></span>
+	  <span class="step active"></span>
+	</div>
+  
+{% endblock %}

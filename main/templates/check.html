@@ -1,0 +1,172 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">
+              <span data-feather="home"></span>
+            </a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:school_report' %}">
+              <span data-feather="bar-chart-2"></span>
+              School Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:daily' %}">
+              <span data-feather="users"></span>
+              Daily Report
+            </a>
+          </li>
+          
+          {% else %}
+
+          {% endif %}
+        </ul>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Built Invoice
+            </a>
+          </li>
+        <h6 class="sidebar-heading justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:new_billing' %}">
+              <span data-feather="file-text"></span>
+              Generate Bill #
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="{% url 'myapp:details' %}">
+              <span data-feather="file-text"></span>
+              Add/Remove
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">
+              <span data-feather="file-text"></span>
+              Details
+            </a>
+          </li>
+        </ul>
+      </h6>
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item" style="background-color: #96847a;">
+        <a class="nav-link" href="{% url 'myapp:check' %}">
+          <span data-feather="file"></span>
+          Print Invoice
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'myapp:payment' %}">
+          <span data-feather="shopping-cart"></span>
+          Add Payment
+        </a>
+      </li>
+      </ul>
+      </div>
+    </nav>
+    
+<div class="row">
+	<div class="col-6">
+		<form action="" method="post">
+		  {% csrf_token %}
+		  <div class="form-group row">
+		    <label>Bill No:</label>
+		    <input type="number" class="form-control" name="bill_new" value="bill_no" id="bill_no" required>
+		    <button type="submit" class="btn btn-primary name=form6">Check</button>
+		  </div>
+		  	  
+		</form>
+	</div>
+	
+	<div class="col-6 row">
+		{% if check_bill %}
+		<form action="/print_bill" method="post" style="margin-top: 60px;margin-left: 20px;">
+			{% csrf_token %}
+			 <input type="hidden" class="form-control" name="bill_no" value="{{ check_bill.bill_no }}" id="bill_no">
+			 <div class="row">
+			 	<button type="submit" class="btn btn-secondary name=form5">Print</button>
+			 </div>
+			
+		</form>
+		</div>
+		<div class="row">
+			<div class="check_details col-12">
+				<h1>Bill No: {{ check_bill.bill_no }}</h1>
+				<h4 style="text-align: right; font-size: 16px;">Date: {{ check_bill.date }}</h4>
+				<hr style="margin-top: 10px;">
+				<div style="padding-bottom: 20px;">
+					<h4 style="float: left; font-size: 16px;">Deputy: {{ check_bill.deputy }}</h4>
+					<h4 style="float: right; font-size: 16px;">School: {{ check_bill.school }}</h4>
+				</div>
+
+				<hr>
+				<div class="table-responsive">
+				  <table class="table">
+				    <thead class="black white-text">
+				      <tr>
+				        <th scope="col">#</th>
+				        <th scope="col">Material.</th>
+				        <th scope="col">Quantity</th>
+				        <th scope="col">Price</th>
+				      </tr>
+				    </thead>
+			{% for order in order1 %}
+				    <tbody>
+				      <tr>
+				        <th scope="row">{{order.id}}</th>
+				        <td>{{order.item}}</td>
+				        <td>{{order.quantity}}</td>
+				        <td>{{order.price}}</td>
+				      </tr>
+				    </tbody>
+			{% endfor %}
+					 <tbody>
+				        <tr>
+				          <th scope="row"></th>
+				          <td></td>
+				          <th style="text-align: right;">Ex-Amount:</th>
+				          <th>{{check_bill.ex_amount}}</th>   
+				          <td></td>      
+				         </tr>
+				      </tbody>
+				  </table>
+				</div>
+				<h4 style="font-size: 16px;">Sale Tax: {{ check_bill.sale_tax }} %</h4>
+				<h4 style="font-size: 16px;">Income Tax: {{ check_bill.income_tax }} %</h4>
+				<h4 style="font-size: 16px;">Service Tax: {{ check_bill.service_tax }} %</h4>
+				<h4 style="font-size: 16px;">PST Tax: {{ check_bill.PST_tax }} %</h4>
+				<hr style="padding-top: 10px">
+
+				<div class="amount">
+					<h4 style="text-align: right; font-size: 18px;">Inclusive Amount = {{ check_bill.inclusive_amount }}</h4>
+				</div>
+				<h4 style="font-size: 14px;">Payment Recieved: {{ check_bill.payment_recieved }}</h4>
+				<div style="text-align: center; font-size: 14px; margin-top: 40px;">
+					<p>This invoice is made by {{ check_bill.user }}</p>
+				</div>
+			</div>
+		</div>
+
+		
+
+
+		{% else %}
+
+		{% endif %}
+	
+	
+</div>
+
+
+{% endblock %}
